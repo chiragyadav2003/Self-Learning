@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import { v4 as uuidv4 } from "uuid";
+import { stream, streamText, streamSSE } from "hono/streaming";
 
 let videos = [];
 
@@ -20,5 +21,16 @@ app.post("/video", async (c) => {
     videos.push(newVideo);
     return c.json(newVideo);
 })
+
+// Read all data (using stream)
+app.get("/videos", (c) => {
+    return streamText(c, async (stream) => {
+        for (const video of videos) {
+            await stream.writeln(JSON.stringify(video))
+        }
+    })
+})
+
+
 
 export default app;
