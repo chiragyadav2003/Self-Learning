@@ -26,10 +26,13 @@ app.post("/video", async (c) => {
 app.get("/videos", (c) => {
     return streamText(c, async (stream) => {
         for (const video of videos) {
-            await stream.writeln(JSON.stringify(video))
+            await stream.writeln(JSON.stringify(video));
+            await stream.sleep(1000);
         }
     })
 })
+
+
 
 
 
